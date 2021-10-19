@@ -1,7 +1,7 @@
 <template>
-    <div class="mb-2" :class="{'text-right': sended}">
-        <p class="font-semibold text-white" v-if="showAuthor">{{ message.author }}</p>
-        <p class="text-white/80 text-sm">{{ message.content }} </p>
+    <div class="px-4" :class="{'text-right': sended, 'mt-2': showAuthor}">
+        <p class="font-semibold text-purple-700 mb-1  dark:text-white" v-if="showAuthor">{{ message.author }}</p>
+        <p class="dark:text-white/80 text-sm mb-1">{{ message.content }} </p>
     </div>
 </template>
 

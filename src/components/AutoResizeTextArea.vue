@@ -2,7 +2,7 @@
     <textarea rows="1"
               ref="textArea"
               class="px-4 light-scroll resize-none outline-none bg-transparent dark:text-white"
-              :placeholder="$attrs['placeholder']"
+              :placeholder="placeholder"
               :value="modelValue"
               @keydown.enter="textAreaSubmit"
               @input="textAreaInput"></textarea>
@@ -17,6 +17,9 @@ const AutoSizeTextArea = defineComponent({
         modelValue: {
             type: String,
             required: true
+        },
+        placeholder: {
+            type: String
         }
     },
     setup(props, context){
@@ -28,7 +31,7 @@ const AutoSizeTextArea = defineComponent({
             }
         };
 
-        const textAreaInput = (e: InputEvent) => {
+        const textAreaInput = (e: Event) => {
             const el = (e.target as HTMLTextAreaElement);
             el.style.height = 'auto';
             if(el.scrollHeight > 140) {

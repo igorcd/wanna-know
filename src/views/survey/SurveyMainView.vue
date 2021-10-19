@@ -1,68 +1,75 @@
 <template>
-    <div class="min-h-screen flex flex-col py-4 items-center justify-center">
+    <transition name="fade" mode="out-in">
+        <!-- Loading -->
+        <div class="h-screen flex items-center justify-center" v-if="state.loading" key="1">
+            <Loading />
+        </div>
 
-        <transition name="drill" mode="out-in">
+        <div class="min-h-screen flex flex-col py-4 items-center justify-center" key="2" v-else>
 
-            <!-- Loading -->
-            <Loading v-if="state.loading"/>
+            <transition name="drill" mode="out-in">
 
-            <!-- Votação conluída -->
-            <div v-else-if="!state.survey?.active" class="container">
-                <!-- Titulo da questão -->
-                <Lottie :animation="trophy" size="400px" class="-mb-20"/>
-                <Text type="headline2" class="mb-8 text-center relative z-10">{{ state.survey.title }}</Text>
-                <Text type="headline1" class="text-center relative z-10">{{ mostVoted.title }}</Text>
-                <Text type="headline4">Venceu com {{ mostVoted.votes.length }} votos!</Text>
+
+                <!-- Votação conluída -->
+                <div v-if="!state.survey?.active" class="container">
+                    <!-- Titulo da questão -->
+                    <Lottie :animation="trophy" size="400px" class="-mb-20"/>
+                    <Text type="headline2" class="mb-8 text-center relative z-10 w-full">{{ state.survey?.title }}</Text>
+                    <Text type="headline1" class="text-center relative z-10">{{ mostVoted?.title }}</Text>
+                    <Text type="headline4">Venceu com {{ mostVoted?.votes.length }} votos!</Text>
                 
-                <Alternative v-for="(question, index) in ordenedVotes"
-                             :key="index"
-                             :votes="question.votes.length" 
-                             :percentage="(question.votes.length / totalVotes) * 100"
-                             :title="question.title"/>
-            </div>
-
-            <!-- Votação -->
-            <div class="container" v-else-if="!hasVoted">
-
-                <!-- Titulo da questão -->
-                <Lottie :animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
-                <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
-            
-                <div class="flex items-center py-4 border-b border-white w-full" v-for="(question, index) in state.survey.questions" :key="index">
-                    <Radio name="survey" :radioValue="index" v-model="state.selectedAlternative"/>
-                    <Text class="px-4">{{ question.title }}</Text>
+                    <Alternative v-for="(question, index) in ordenedVotes"
+                                 :key="index"
+                                 :votes="question.votes.length" 
+                                 :percentage="(question.votes.length / totalVotes) * 100"
+                                 :title="question.title"/>
                 </div>
-                <Button class="mt-8" @click="vote()">
-                    <Loading v-if="state.voting"/>
-                    <div v-else>Votar</div>
-                </Button>
+
+                <!-- Votação -->
+                <div class="container" v-else-if="!hasVoted">
+
+                    <!-- Titulo da questão -->
+                    <Lottie :animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
+                    <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
+            
+                    <div class="flex items-center py-4 border-b border-white w-full" v-for="(question, index) in state.survey.questions" :key="index">
+                        <Radio name="survey" :radioValue="index" v-model="state.selectedAlternative"/>
+                        <Text class="px-4">{{ question.title }}</Text>
+                    </div>
+                    <Button class="mt-8" @click="vote()">
+                        <Loading v-if="state.voting"/>
+                        <div v-else>Votar</div>
+                    </Button>
+                </div>
+
+                <!-- Votação em andamento -->
+                <div class="container" v-else>
+                    <!-- Titulo da questão -->
+                    <Lottie :animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
+                    <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
+                    <Alternative v-for="(question, index) in state.survey.questions"
+                                 :key="index"
+                                 :votes="question.votes.length" 
+                                 :percentage="(question.votes.length / totalVotes) * 100"
+                                 :title="question.title"/>
+                </div>
+            </transition>
+
+
+            <div class="container border-t-2 border-white/30 pt-8 dark:border-gray-400">
+                <Chat/>
             </div>
-
-            <!-- Votação em andamento -->
-            <div class="container" v-else>
-
-                <!-- Titulo da questão -->
-                <Lottie :animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
-                <Text type="headline1" class="mb-8 text-center">{{ state.survey.title }}</Text>
-                <Alternative v-for="(question, index) in state.survey.questions"
-                             :key="index"
-                             :votes="question.votes.length" 
-                             :percentage="(question.votes.length / totalVotes) * 100"
-                             :title="question.title"/>
-            </div>
-        </transition>
-
-        <Chat/>
         
-        <!-- Balão de novo voto -->
-        <NewVote ref="newVoteRef"/>
+            <!-- Balão de novo voto -->
+            <NewVote ref="newVoteRef"/>
 
-        <!-- Voltar -->
-        <IconButton class="fixed top-4 left-4" icon="times" iconSize="1.5rem" size="3rem" @click="$router.replace({ name: 'pin' })"/>
+            <!-- Voltar -->
+            <IconButton class="absolute top-4 left-4" icon="times" iconSize="1.5rem" size="3rem" @click="$router.replace({ name: 'pin' })"/>
 
-        <!-- Dark Mode -->
-        <DarkModeToogle class="fixed top-4 right-4"/>
-    </div>
+            <!-- Dark Mode -->
+            <DarkModeToogle class="absolute top-4 right-4"/>
+        </div>
+    </transition>
 </template>
 
 <script lang='ts'>
@@ -145,7 +152,7 @@ const SurveyView = defineComponent({
 
         const hasVoted = computed(() => state.survey?.questions.find(q => q.votes.includes(state.ip)));
 
-        const totalVotes = computed(() => state.survey?.questions.reduce((acc,el) => acc += el.votes.length, 0));
+        const totalVotes = computed(() => state.survey?.questions.reduce((acc,el) => acc += el.votes.length, 0) || 0);
 
         const mostVoted = computed(() => state.survey?.questions.reduce((acc, el) => acc.votes.length > el.votes.length ? acc : el, { title: "", votes : [] }));
 

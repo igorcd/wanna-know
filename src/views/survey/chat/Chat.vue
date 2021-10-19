@@ -1,9 +1,11 @@
 <template>
-    <div class="lg:fixed top-[calc(50%-10rem)] right-5 px-4 lg:px-0 w-full max-w-lg lg:w-60 h-80 flex flex-col items-stretch">
-        <p class="font-semibold text-white text-center">Deixe aqui a sua oponião 💬</p>
+    <Card class=" w-full h-80 flex flex-col items-stretch">
+
+        <p class="font-semibold dark:text-white text-center p-4">Deixe aqui a sua oponião 💬</p>
+
         <div class="flex-1 overflow-auto light-scroll pr-2 chat-container pt-4" id="chatContainer">
             <div id="chatWrapper">
-                <p v-if="state.messages.length == 0" class="text-center text-white/70">Ninguem falou nada ainda :(</p>
+                <p v-if="state.messages.length == 0" class="text-center text-gray-900/50 dark:text-white/70">Ninguem falou nada ainda :(</p>
                 <component :is="message.author == 'admin' ? 'ChatAdminMessage' : 'ChatMessage'"
                            v-for="(message, index) in state.messages" :key="message.id" :message="message"
                            :showAuthor="state.messages[index -1] && state.messages[index -1].author != message.author"
@@ -12,17 +14,17 @@
 
         </div>
         
-        <form v-if="state.userNameSetted" @submit.prevent="sendMessage">
+        <form v-if="state.userNameSetted" @submit.prevent="sendMessage" class="p-4">
             <input v-model="state.message"
                    id="messageInput"
-                   placeholder="Digite sua mensagem" class="bg-white/20 h-10 rounded-lg text-sm px-3 text-white placeholder-white w-full"/>
+                   placeholder="Digite sua mensagem" class="bg-gray-200 dark:bg-white/20 h-10 rounded-lg text-sm px-3 dark:text-white dark:placeholder-white w-full"/>
         </form>
-        <form @submit.prevent="setUserName" v-else>
+        <form @submit.prevent="setUserName" v-else class="p-4">
             <input v-model="state.userName"
                    maxlength="16"
-                   placeholder="Digite seu nome para participar" class="bg-white/20 h-10 rounded-lg text-sm px-3 text-white placeholder-white w-full"/>
+                   placeholder="Digite seu nome para participar" class="bg-gray-200 dark:bg-white/20 h-10 rounded-lg text-sm px-3 dark:text-white dark:placeholder-white w-full"/>
         </form>
-    </div>
+    </Card>
 </template>
 
 <script lang='ts'>
@@ -34,6 +36,7 @@ import { useFirestore } from '../../../hooks/firebase';
 import { Message } from '../../../interfaces/Conversation';
 import ChatAdminMessage from './ChatAdminMessage.vue';
 import ChatMessage from './ChatMessage.vue';
+import Card from '../../../components/Card.vue';
 
 interface ChatState {
     userName: string;
@@ -43,7 +46,7 @@ interface ChatState {
 }
 
 const Chat = defineComponent({
-    components: { ChatAdminMessage, ChatMessage },
+    components: { ChatAdminMessage, ChatMessage, Card },
     setup() {
         const { watchCollection, insert } = useFirestore();
         const alert = useAlert();

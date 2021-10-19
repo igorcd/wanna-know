@@ -37,7 +37,7 @@ import * as animations from '../assets/lottie';
 
 
 interface AlertState {
-    options: AlertOption[] | null;
+    options: AlertOption[];
     animation: any;
     title: string;
     message: string;

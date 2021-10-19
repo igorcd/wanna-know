@@ -1,7 +1,7 @@
 <template>
     <IconsSprite/>
     
-    <div class="w-full min-h-screen bg-gradient-to-br from-purple-700 to-indigo-400 dark:from-gray-900 dark:to-gray-700 bg-fixed">
+    <div class="w-full min-h-screen bg-primary">
         <RouterView v-slot="{ Component }">
             <transition name="drill" mode="out-in">
                 <component :is="Component"/>

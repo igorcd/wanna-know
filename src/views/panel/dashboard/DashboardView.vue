@@ -18,7 +18,7 @@
                             :key="survey.token" 
                             :survey="survey"
                             @click="showDetailModal(survey)"
-                            @finish="openCloseSurveyModal(survey.id)"/>
+                            @finish="openCloseSurveyModal(survey)"/>
                 <NewSurveyCard @click="$router.push({ name: 'newSurvey'})"/>
             </div>
         </transition>
@@ -186,7 +186,7 @@ const DashboardView = defineComponent({
         };
 
         /** Abrir modal de finalização da enquete */
-        const openCloseSurveyModal = (id: string) => {
+        const openCloseSurveyModal = (survey: Survey) => {
             alert({
                 title: "Atenção",
                 message: "Tem certeza que deseja finalizar essa enquete?",
@@ -196,7 +196,7 @@ const DashboardView = defineComponent({
                     },
                     {
                         icon: 'check',
-                        action: () => closeModal(id)
+                        action: () => closeModal(survey.id!)
                     }
                 ]
             });

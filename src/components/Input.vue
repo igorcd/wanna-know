@@ -2,11 +2,11 @@
     <div class="w-full">
         <input class="w-full bg-white bg-opacity-20 text-white placeholder-white font-medium outline-none h-12 px-3 rounded" 
                :class="inputClass"
-               :placeholder="$attrs['placeholder']"
-               :type="$attrs['type']"
+               :placeholder="placeholder"
+               :type="type"
                v-model="handleValue"
                v-mask="mask"
-               :autocomplete="$attrs['autocomplete']"
+               :autocomplete="autocomplete"
                :name="name"/>
         <p class="text-white text-sm !text-left">{{ error }}</p>
     </div>
@@ -37,6 +37,16 @@ const Input = defineComponent({
         mask: {
             type: String,
             default: ''
+        },
+        placeholder: {
+            type: String
+        },
+        type: {
+            type: String,
+            default: 'text'
+        },
+        autocomplete: {
+            type: String
         }
     },
     setup(props, context) {

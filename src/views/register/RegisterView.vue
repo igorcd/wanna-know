@@ -80,7 +80,8 @@ const RegisterView = defineComponent({
                     await register({ email: state.email, password: state.password });
                     replace({ name: 'registerName' });
                     
-                } catch (error) {
+                } catch (e) {
+                    const error = e as string;
                     alert({ message: error });
                     state.loading = false;
                 }

@@ -1,13 +1,11 @@
 <template>
-    <svg :style="[{ 'width': size },
-                  { 'height': size },
-                  `${type}: ${color}`]">
+    <svg :style="style">
         <use :href="'#' +icon"></use>
     </svg>
 </template>
 
 <script lang='ts'>
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 
 const Icon = defineComponent({
     props: {
@@ -17,7 +15,7 @@ const Icon = defineComponent({
         },
         size: {
             type: String,
-            default: '1rem'
+            default: '1.5rem'
         },
         color: {
             type: String,
@@ -26,6 +24,21 @@ const Icon = defineComponent({
             type: String as PropType<'fill'|'stroke'>,
             default: 'fill'
         }
+    },
+    setup(props) {
+        const style = computed(() => {
+
+            let placeholder:{[key: string]: any} = {
+                'width': props.size,
+                'height': props.size,
+            };
+            
+            placeholder[props.type] = props.color;
+
+            return placeholder;
+        });
+
+        return { style };
     }
 });
 

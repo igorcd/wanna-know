@@ -35,7 +35,7 @@
 @layer components {
     /* Textos */
     .headline1 {
-        @apply font-bold text-white text-4xl;
+        @apply font-bold text-white text-4xl dark:text-gray-300;
     }
     .headline2 {
         @apply font-medium text-white text-3xl;
@@ -72,7 +72,11 @@
     }
 
     .container {
-        @apply max-w-lg 2xl:max-w-xl w-full mx-auto px-4 flex flex-col items-center 2xl:pt-8 pb-12;
+        @apply max-w-lg 2xl:max-w-xl w-full mx-auto px-4 flex flex-col items-center pb-8;
+    }
+
+    .bg-primary {
+        @apply bg-gradient-to-br from-purple-700 to-indigo-400 dark:from-gray-900 dark:to-gray-700 bg-fixed;
     }
 }
 

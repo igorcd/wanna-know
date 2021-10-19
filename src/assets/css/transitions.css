@@ -1,0 +1,50 @@
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: .3s;
+}
+
+/* Drill */
+.drill-enter-from, .drill-leave-to {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.drill-enter-active, .drill-leave-active {
+    transition: .3s;
+}
+
+/* DrillOut */
+.drillOut-enter-from, .drillOut-leave-to {
+    opacity: 0;
+    transform: scale(1.05);
+}
+
+.drillOut-enter-active, .drillOut-leave-active {
+    transition: .3s;
+}
+
+/* Modal*/
+@keyframes modal {
+    0%{
+        transform: scale(.7)
+    }
+    70% {
+        transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1)
+    }
+}
+
+.modal-enter-active {
+    animation: modal .3s ease-out;
+}
+.modal-leave-to {
+    opacity: 0;
+}
+.modal-leave-active {
+    transition: opacity .3s ease-out;
+}

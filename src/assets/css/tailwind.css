@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+@layer base {
+    :root {
+        --primary-color: #818cf8;
+    }
+
+      /* Light Scroll*/
+      .light-scroll::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+        opacity: 0;
+    }
+    .light-scroll::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0); 
+        border-radius: 2px;
+    }
+    .light-scroll::-webkit-scrollbar-thumb {
+        background: #B3B3B3; 
+        border-radius: 4px;
+    }
+    .light-scroll::-webkit-scrollbar-thumb:hover {
+        background: #B3B3B3; 
+    }
+
+
+    button {
+        @apply transform active:scale-90 transition-all duration-300 focus:outline-none;
+    }
+}
+
+@layer components {
+    /* Textos */
+    .headline1 {
+        @apply font-bold text-white text-4xl;
+    }
+    .headline2 {
+        @apply font-medium text-white text-3xl;
+    }
+    .headline3 {
+        @apply font-bold text-gray-700 text-2xl;
+    }
+    .headline4 {
+        @apply text-white text-xl;
+    }
+    .subheader {
+        @apply text-white  opacity-75;
+    }
+    .caption {
+        @apply text-white text-sm;
+    }
+    .body {
+        @apply text-white;
+    }
+    /* Botões */
+    .primary {
+        @apply h-12 w-full flex items-center justify-center shadow-lg rounded text-gray-700 bg-white font-medium;
+    }
+    .round {
+        @apply w-12 h-12 rounded-full border border-white flex items-center justify-center mx-3 cursor-pointer;
+    }
+
+    .survey-card {
+        @apply relative
+        w-full sm:w-auto sm:max-w-xs sm:mx-3 mb-6 h-44
+        flex flex-col items-stretch flex-1 
+        cursor-pointer hover:scale-105 transform transition-transform duration-300;
+        min-width: 16rem;
+    }
+
+    .container {
+        @apply max-w-lg 2xl:max-w-xl w-full mx-auto px-4 flex flex-col items-center 2xl:pt-8 pb-12;
+    }
+}
+
+@layer utilities {
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
+        overflow-wrap: break-word;
+    }
+}

@@ -29,7 +29,7 @@
 </template>
 
 <script lang='ts'>
-import { computed, defineComponent, onMounted, reactive } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { Input, Button, Form, Text, TextButton, Loading } from '../../components';

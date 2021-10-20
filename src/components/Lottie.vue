@@ -36,7 +36,7 @@ const Lottie = defineComponent({
                 renderer: 'svg',
                 loop: false,
                 autoplay: false,
-                path: `/${props.animation}.json`,
+                path: `/lottie/${props.animation}.json`,
             });
             if(props.autoPlay) {
                 animation.play();

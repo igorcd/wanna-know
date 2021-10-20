@@ -6,7 +6,7 @@
             <div class=" flex items-center justify-center"
                  :style="{transform: `rotate(${state.rotation}deg)`}">
                 <div class="absolute">
-                    <Lottie :animation="fireworks" size="250px"/>
+                    <Lottie animation="fireworks" size="250px"/>
                 </div>
                 <p class="vote-box__text relative z-10">{{ state.text }}</p>
             </div>
@@ -17,9 +17,7 @@
 <script lang='ts'>
 import { defineComponent, onBeforeUnmount, onMounted, reactive } from 'vue';
 import { Lottie } from '../../components';
-import { fireworks } from '../../assets/lottie';
 import { randomInt } from '../../utils/helperFunctions';
-
 
 interface NewVoteState {
     queue: string[],
@@ -71,7 +69,7 @@ const NewVote = defineComponent({
         onBeforeUnmount(() => clearInterval(interval));
         onMounted(() => loadQueue());
         
-        return { fireworks, state, addInQueue };
+        return { state, addInQueue };
     }
 });
 

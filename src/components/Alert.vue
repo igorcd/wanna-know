@@ -33,8 +33,6 @@ import { defineComponent, reactive } from 'vue';
 import Icon from './Icon.vue';
 import Lottie from './Lottie.vue';
 import { AlertOption } from '../hooks/alert';
-import * as animations from '../assets/lottie';
-
 
 interface AlertState {
     options: AlertOption[];
@@ -50,7 +48,7 @@ const Alert = defineComponent({
 
         const state: AlertState = reactive({
             options: [],
-            animation: animations.alert,
+            animation: 'alert',
             title: "Ops...",
             message: "",
             isOpened: false
@@ -58,7 +56,7 @@ const Alert = defineComponent({
 
         const displayAlert = (options: { title?: string; message: string; options?: AlertOption[]; animation?: string; detail?: string}) => {
             state.options = options.options || [];
-            state.animation = options.animation ? (animations as any)[options.animation] : animations.alert;
+            state.animation = options.animation ? options.animation : 'alert';
             state.title = options.title || "Ops...";
             state.message = options.message;
             state.isOpened = true;

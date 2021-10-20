@@ -13,7 +13,7 @@
                 <!-- Votação conluída -->
                 <div v-if="!state.survey?.active" class="container">
                     <!-- Titulo da questão -->
-                    <Lottie :animation="trophy" size="400px" class="-mb-20"/>
+                    <Lottie animation="trophy" size="400px" class="-mb-20"/>
                     <Text type="headline2" class="mb-8 text-center relative z-10 w-full">{{ state.survey?.title }}</Text>
                     <Text type="headline1" class="text-center relative z-10">{{ mostVoted?.title }}</Text>
                     <Text type="headline4">Venceu com {{ mostVoted?.votes.length }} votos!</Text>
@@ -29,7 +29,7 @@
                 <div class="container" v-else-if="!hasVoted">
 
                     <!-- Titulo da questão -->
-                    <Lottie :animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
+                    <Lottie animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
                     <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
             
                     <div class="flex items-center py-4 border-b border-white w-full" v-for="(question, index) in state.survey.questions" :key="index">
@@ -45,7 +45,7 @@
                 <!-- Votação em andamento -->
                 <div class="container" v-else>
                     <!-- Titulo da questão -->
-                    <Lottie :animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
+                    <Lottie animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
                     <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
                     <Alternative v-for="(question, index) in state.survey.questions"
                                  :key="index"
@@ -85,7 +85,6 @@ import { Lottie, Text, Radio, Button, Loading, IconButton, DarkModeToogle } from
 import Chat from './chat/Chat.vue';
 import NewVote from './NewVote.vue';
 import Alternative from './Alternative.vue';
-import { music, trophy } from '../../assets/lottie';
 import Survey from '../../interfaces/Survey';
 
 interface SurveyViewState {
@@ -186,7 +185,7 @@ const SurveyView = defineComponent({
 
         onMounted(() => loadSurvey());
 
-        return { state, music, vote, totalVotes, newVoteRef, hasVoted, trophy, mostVoted, ordenedVotes };
+        return { state, vote, totalVotes, newVoteRef, hasVoted, mostVoted, ordenedVotes };
     }
 });
 

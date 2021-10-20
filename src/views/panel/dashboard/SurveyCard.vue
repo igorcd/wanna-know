@@ -19,7 +19,7 @@
             <Icon icon="vote" size="24px" class="fill-current text-purple-700 dark:text-white mr-1 mb-1"/>
 
             <div class="relative">
-                <Lottie class="absolute bottom-full w-12 -left-3" ref="lottieRef" :autoPlay="false" :loop="false" :animation="stars"/>
+                <Lottie class="absolute bottom-full w-12 -left-3" ref="lottieRef" :autoPlay="false" :loop="false" animation="stars"/>
                 <p class="text-purple-700 font-semibold transition-all duration-150 w-6 text-center dark:text-white" ref="votesRef">{{ votes }}</p>
             </div>
             
@@ -31,7 +31,6 @@
 <script lang='ts'>
 import { computed, defineComponent, watch, PropType, ref } from 'vue';
 import { Icon, TextButton, Lottie, Badge, Card } from '../../../components';
-import { stars } from '../../../assets/lottie';
 import Survey from '../../../interfaces/Survey';
 
 const SurveyCard = defineComponent({
@@ -75,7 +74,7 @@ const SurveyCard = defineComponent({
 
         watch(() => totalVotes.value, (newValue) => onVotesChange(newValue));
 
-        return { stars, votes, votesRef, lottieRef, mostVoted };
+        return { votes, votesRef, lottieRef, mostVoted };
     }
 });
 

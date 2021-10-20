@@ -10,7 +10,7 @@ import LottieWeb, { AnimationItem } from 'lottie-web';
 const Lottie = defineComponent({
     props: {
         animation: {
-            type: Object,
+            type: String,
             required: true
         },
         autoPlay: {
@@ -36,7 +36,7 @@ const Lottie = defineComponent({
                 renderer: 'svg',
                 loop: false,
                 autoplay: false,
-                animationData: props.animation
+                path: `/${props.animation}.json`,
             });
             if(props.autoPlay) {
                 animation.play();

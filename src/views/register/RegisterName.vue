@@ -2,7 +2,7 @@
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
 
         <div class="w-full max-w-sm text-center">
-            <Lottie :animation="welcome" class="w-64 sm:w-80 mx-auto -mb-10" size="250px"/>
+            <Lottie animation="welcome" class="w-64 sm:w-80 mx-auto -mb-10" size="250px"/>
             <Text type="headline1" class="mb-4">Bem-vindo</Text>
             <Text type="subheader" class="mb-10">Para continuarmos, me informa como você gostaria de ser chamado</Text>
 
@@ -21,7 +21,6 @@
 <script lang='ts'>
 import { defineComponent, reactive } from 'vue';
 import { Lottie, Text, Button, Form, Input, Loading } from '../../components';
-import { welcome } from '../../assets/lottie';
 import { required } from '../../utils/validators';
 import { useAlert } from '../../hooks/alert';
 import { useAuth } from '../../hooks/firebase';
@@ -57,7 +56,7 @@ const RegisterName = defineComponent({
                 }
             }
         };
-        return { welcome, name, required, state, submit };
+        return { name, required, state, submit };
     }
 });
 

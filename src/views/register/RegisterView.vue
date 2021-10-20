@@ -3,7 +3,7 @@
 
         <div class="relative">
             <div class="w-44 h-44 flex items-center justify-center overflow-hidden">
-                <Lottie :animation="registerAnimation" size="250px"/>
+                <Lottie animation="register" size="250px"/>
             </div>
 
             <div class="absolute left-[calc(100%-10px)] top-2 -rotate-12 hidden sm:block">
@@ -52,7 +52,6 @@ import { Text, Form, Input, Button, Loading, Lottie } from '../../components';
 import { useAlert } from '../../hooks/alert';
 import { useAuth } from '../../hooks/firebase';
 import { required, isSame, validEmail, minLength } from '../../utils/validators';
-import registerAnimation from '../../assets/lottie/register.json';
 import { useRouter } from 'vue-router';
 
 const RegisterView = defineComponent({
@@ -88,7 +87,7 @@ const RegisterView = defineComponent({
             }
         };
 
-        return { state, submit, required, isSame, validEmail, minLength, registerAnimation };
+        return { state, submit, required, isSame, validEmail, minLength };
     }
 });
 

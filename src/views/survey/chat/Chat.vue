@@ -80,7 +80,6 @@ const Chat = defineComponent({
                 orderBy: [{ field: 'timeStamp' }],
                 listeners: {
                     onAdd: (m) => {
-                        console.log(m);
                         state.messages.push(m);
                     }
                 }

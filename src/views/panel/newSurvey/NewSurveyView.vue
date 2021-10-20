@@ -21,7 +21,7 @@
 
                     <div class="h-14 flex items-center border-b border-gray-300 dark:border-gray-500 last:border-b-0" v-for="(question, index) in state.survey.questions" :key="index">
                         <input placeholder="Titulo da altenativa" class="flex-1 outline-none bg-transparent dark:text-white" v-model="question.title">
-                        <IconButton icon="times" color="#EF4444" @pressed="() => removeQuestion(index)"/>
+                        <IconButton icon="times" color="#EF4444" @click="() => removeQuestion(index)"/>
                     </div>
 
                 </div>
@@ -93,7 +93,9 @@ const CreateSurveyView = defineComponent({
         });
 
         const addQuestion = () => state.survey.questions.push({ title: '' });
-        const removeQuestion = (index: number) => state.survey.questions.splice(index, 1);
+        const removeQuestion = (index: number) => {
+            state.survey.questions.splice(index, 1);
+        };
 
         const submit = async () => {
             

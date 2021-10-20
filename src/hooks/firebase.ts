@@ -145,7 +145,6 @@ export const useFirestore = () => {
 
         const q = query(collection(db, basePath, ...segments.slice(1)), ...conditions, ...order);
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            console.log(snapshot);
             snapshot.docChanges().forEach(change => {
                 const data = {
                     id: change.doc.id,
@@ -174,7 +173,6 @@ export const useFirestore = () => {
 
         const docRef = await addDoc(collection(db, basePath, ...segments.slice(1)), data);
 
-        console.log(docRef);
         return docRef;
     };
 

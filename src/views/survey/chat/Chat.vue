@@ -1,5 +1,5 @@
 <template>
-    <Card class="sm:fixed bottom-5 right-5 w-80">
+    <Card class="lg:fixed bottom-5 right-5 w-80">
 
         <p class="font-semibold dark:text-white text-center p-4">Deixe aqui a sua oponião 💬</p>
 

@@ -5,6 +5,7 @@
 
         <div class="relative">
             <div class="overflow-auto light-scroll pr-2 chat-container pt-4 h-80" id="chatContainer">
+
                 <div id="chatWrapper">
                     <p v-if="state.messages.length == 0" class="text-center text-gray-900/50 dark:text-white/70">Ninguem falou nada ainda :(</p>
                     <component :is="message.author == 'admin' ? 'ChatAdminMessage' : 'ChatMessage'"
@@ -15,13 +16,15 @@
 
             </div>
         
-            <form  @submit.prevent="sendMessage" class="p-4">
+            <form  @submit.prevent="sendMessage" class="p-4" >
                 <input v-model="state.message"
+                       autocomplete="off"
                        id="messageInput"
-                       placeholder="Digite sua mensagem" class="bg-gray-200 dark:bg-white/20 h-10 rounded-lg text-sm px-3 dark:text-white dark:placeholder-white w-full"/>
+                       placeholder="Digite sua mensagem"
+                       class="outline-none border-2 border-transparent focus:border-purple-400 bg-indigo-50 dark:bg-white/20 h-10 rounded-lg text-sm px-3 dark:text-white dark:placeholder-white w-full"/>
             </form>
 
-            <div v-if="!state.userNameSetted"
+            <div v-if="!state.userNameSetted || false"
                  class="absolute top-0 right-0 left-0 bottom-0 backdrop-blur-lg rounded-xl transition-opacity sm:opacity-0 hover:opacity-100 flex flex-col items-center justify-center p-4">
                 <Text type="headline3" class="text-center mb-8">Antes de começar, como gostaria de ser chamado?</Text>
                 

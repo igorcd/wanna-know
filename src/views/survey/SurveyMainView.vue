@@ -56,9 +56,7 @@
             </transition>
 
 
-            <div class="container border-t-2 border-white/30 pt-8 dark:border-gray-400">
-                <Chat/>
-            </div>
+            <Chat/>
         
             <!-- Balão de novo voto -->
             <NewVote ref="newVoteRef"/>

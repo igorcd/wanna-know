@@ -1,29 +1,40 @@
 <template>
-    <Card class=" w-full h-80 flex flex-col items-stretch">
+    <Card class="sm:fixed bottom-5 right-5 w-80">
 
         <p class="font-semibold dark:text-white text-center p-4">Deixe aqui a sua oponião 💬</p>
 
-        <div class="flex-1 overflow-auto light-scroll pr-2 chat-container pt-4" id="chatContainer">
-            <div id="chatWrapper">
-                <p v-if="state.messages.length == 0" class="text-center text-gray-900/50 dark:text-white/70">Ninguem falou nada ainda :(</p>
-                <component :is="message.author == 'admin' ? 'ChatAdminMessage' : 'ChatMessage'"
-                           v-for="(message, index) in state.messages" :key="message.id" :message="message"
-                           :showAuthor="state.messages[index -1] && state.messages[index -1].author != message.author"
-                           :sended="state.userNameSetted && state.userName == message.author"/>
-            </div>
+        <div class="relative">
+            <div class="overflow-auto light-scroll pr-2 chat-container pt-4 h-80" id="chatContainer">
+                <div id="chatWrapper">
+                    <p v-if="state.messages.length == 0" class="text-center text-gray-900/50 dark:text-white/70">Ninguem falou nada ainda :(</p>
+                    <component :is="message.author == 'admin' ? 'ChatAdminMessage' : 'ChatMessage'"
+                               v-for="(message, index) in state.messages" :key="message.id" :message="message"
+                               :showAuthor="state.messages[index -1] && state.messages[index -1].author != message.author"
+                               :sended="state.userNameSetted && state.userName == message.author"/>
+                </div>
 
-        </div>
+            </div>
         
-        <form v-if="state.userNameSetted" @submit.prevent="sendMessage" class="p-4">
-            <input v-model="state.message"
-                   id="messageInput"
-                   placeholder="Digite sua mensagem" class="bg-gray-200 dark:bg-white/20 h-10 rounded-lg text-sm px-3 dark:text-white dark:placeholder-white w-full"/>
-        </form>
-        <form @submit.prevent="setUserName" v-else class="p-4">
-            <input v-model="state.userName"
-                   maxlength="16"
-                   placeholder="Digite seu nome para participar" class="bg-gray-200 dark:bg-white/20 h-10 rounded-lg text-sm px-3 dark:text-white dark:placeholder-white w-full"/>
-        </form>
+            <form  @submit.prevent="sendMessage" class="p-4">
+                <input v-model="state.message"
+                       id="messageInput"
+                       placeholder="Digite sua mensagem" class="bg-gray-200 dark:bg-white/20 h-10 rounded-lg text-sm px-3 dark:text-white dark:placeholder-white w-full"/>
+            </form>
+
+            <div v-if="!state.userNameSetted"
+                 class="absolute top-0 right-0 left-0 bottom-0 backdrop-blur-lg rounded-xl transition-opacity sm:opacity-0 hover:opacity-100 flex flex-col items-center justify-center p-4">
+                <Text type="headline3" class="text-center mb-8">Antes de começar, como gostaria de ser chamado?</Text>
+                
+                <form  @submit.prevent="setUserName" class="p-4 w-full">
+                    <input v-model="state.userName"
+                           id="messageInput"
+                           placeholder="Ex.: noob_master123" 
+                           class="bg-gray-200 dark:bg-white/20 h-10 rounded-lg text-sm px-3 dark:text-white dark:placeholder-white w-full"/>
+                </form>
+            </div>
+        </div>
+
+        
     </Card>
 </template>
 
@@ -36,7 +47,7 @@ import { useFirestore } from '../../../hooks/firebase';
 import { Message } from '../../../interfaces/Conversation';
 import ChatAdminMessage from './ChatAdminMessage.vue';
 import ChatMessage from './ChatMessage.vue';
-import Card from '../../../components/Card.vue';
+import { Card, Text, Icon } from '../../../components';
 
 interface ChatState {
     userName: string;
@@ -46,7 +57,7 @@ interface ChatState {
 }
 
 const Chat = defineComponent({
-    components: { ChatAdminMessage, ChatMessage, Card },
+    components: { ChatAdminMessage, ChatMessage, Card, Text, Icon },
     setup() {
         const { watchCollection, insert } = useFirestore();
         const alert = useAlert();
@@ -63,6 +74,7 @@ const Chat = defineComponent({
         const loadChat = async() => {
             unwatch = await watchCollection<Message>({
                 path: `chats/${params.id}/messages`,
+                orderBy: [{ field: 'timeStamp' }],
                 listeners: {
                     onAdd: (m) => {
                         console.log(m);
@@ -93,7 +105,7 @@ const Chat = defineComponent({
         };
 
         const sendMessage = async() => {
-            if(state.message.length > 0){
+            if(state.message.length > 0 && state.userNameSetted){
                 const message = state.message;
                 state.message = "";
                 (document.querySelector("#messageInput") as HTMLInputElement).focus();

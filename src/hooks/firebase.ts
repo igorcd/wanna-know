@@ -5,7 +5,9 @@ import { default_response } from "../utils/constants";
 import firebaseErrors from "../utils/firebaseErrors";
 
 type CollectionListener<T> = (el: T) => void;
-type CollectionOrder<T> = keyof T;
+
+type CollectionOrder<T> = { field: keyof T, descending?: boolean };
+
 interface Listeners<T> {
     onAdd: CollectionListener<T>,
     onChange?: CollectionListener<T>,
@@ -139,7 +141,7 @@ export const useFirestore = () => {
         const basePath = segments[0];
 
         const conditions = filters?.map(filter => where(filter[0].toString(), filter[1], filter[2])) || [];
-        const order = data.orderBy?.map(order => orderBy(order.toString())) || [];
+        const order = data.orderBy?.map(order => orderBy(order.field.toString(), order.descending ? 'desc' : 'asc')) || [];
 
         const q = query(collection(db, basePath, ...segments.slice(1)), ...conditions, ...order);
         const unsubscribe = onSnapshot(q, (snapshot) => {

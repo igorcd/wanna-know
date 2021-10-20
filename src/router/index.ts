@@ -18,12 +18,6 @@ import SurveyMainView from '../views/survey/SurveyMainView.vue';
 
 
 // NavigationGuards
-const anonymousGuard: NavigationGuard = (to, from, next) => {
-    const { getUser } = useAuth();
-    const user = getUser();
-    user ? next() : next({ name: 'pin' });
-};
-
 const authenticationGuard: NavigationGuard = (to, from, next) => {
     const { getUser } = useAuth();
     const user = getUser();
@@ -74,7 +68,6 @@ const router = createRouter({
         {
             path: '/survey/:id',
             name: 'survey',
-            beforeEnter: anonymousGuard,
             component: SurveyMainView
         },
         {

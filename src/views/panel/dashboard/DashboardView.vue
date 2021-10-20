@@ -25,7 +25,7 @@
 
         <!-- Detalhe -->
         <transition name="fade">
-            <div class="fixed flex flex-col items-center justify-center top-0 left-0 w-full h-screen bg-black/60" v-show="state.detailOpened">
+            <div class="fixed flex flex-col items-center justify-center top-0 left-0 w-full h-screen bg-black/60" @click.self="state.detailOpened = false" v-show="state.detailOpened">
 
                 <!-- QR Code -->
                 <div id="qrCode" class="rounded-xl overflow-hidden mb-6"></div>
@@ -44,7 +44,7 @@
                     <button class="round" @click="downloadQrCode">
                         <Icon icon="download" size="2rem" color="white"/>
                     </button>
-                    <a target="_blank" :href="`survey/${state.selectedSurvey?.id}`" class="round">
+                    <a target="_blank" :href="`survey/${state.selectedSurvey?.id}`" @click="state.detailOpened = false" class="round">
                         <Icon icon="expand" size="2rem" color="white"/>
                     </a>
                 </div>

@@ -7,9 +7,12 @@
         
         <Text type="subheader" class="text-center  mb-20">Acesse a sua conta para criar enquetes</Text>
         <Form @onSubmit="submit">
-            <Input v-model="state.email" name="e-mail" 
+            <Input v-model="state.email" 
+                   name="e-mail" 
                    placeholder="E-mail" class="mb-4"
-                   :rules="[required]"/>
+                   :rules="[required]"
+                   type="email"
+                   autocomplete="email"/>
             <Input v-model="state.password" name="senha" 
                    type="password"
                    placeholder="Senha" class="mb-4"

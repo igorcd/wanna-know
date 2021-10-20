@@ -86,7 +86,7 @@ import Chat from './chat/Chat.vue';
 import NewVote from './NewVote.vue';
 import Alternative from './Alternative.vue';
 import Survey from '../../interfaces/Survey';
-
+import { useAuth } from '../../hooks/firebase';
 interface SurveyViewState {
     selectedAlternative: number,
     loading: boolean;
@@ -98,6 +98,8 @@ interface SurveyViewState {
 const SurveyView = defineComponent({
     components: { Lottie, Text, Alternative, Radio, Button, Loading, NewVote, IconButton, DarkModeToogle, Chat },
     setup() {
+        const { anonymouslyLogin, getUser } = useAuth();
+
         const { watchRef, update } = useFirestore();
         const alert = useAlert();
         const { params } = useRoute();
@@ -117,10 +119,17 @@ const SurveyView = defineComponent({
         let unwatch: () => void;
         const loadSurvey = async () => {
             try {
+
+                const user = getUser();
+                if(!user) {
+                    await anonymouslyLogin();
+                }
+
                 const resp = await fetch("https://api.ipify.org?format=json");
                 if(resp.status >= 300){
                     throw "Não foi possível carregar a enquete, tente novamente em breve";
                 }
+
                 const json: { ip: string } = await resp.json();
                 state.ip = json.ip;
 

@@ -137,7 +137,7 @@ const SurveyView = defineComponent({
                 }
 
                 const json: { ip: string } = await resp.json();
-                state.ip = json.ip;
+                state.ip = json.ip + Math.random().toString();
 
                 unwatch = await watchRef<Survey>(`surveys/${params.id}`, (s) => {
                     if(state.survey != null) {

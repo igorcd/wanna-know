@@ -1,5 +1,5 @@
 <template>
-    <Card class="lg:fixed bottom-5 right-5 w-80">
+    <Card class="xl:fixed bottom-5 right-5 w-80">
 
         <p class="font-semibold dark:text-white text-center p-4">Deixe aqui a sua oponião 💬</p>
 
@@ -25,7 +25,7 @@
             </form>
 
             <div v-if="!state.userNameSetted || false"
-                 class="absolute top-0 right-0 left-0 bottom-0 backdrop-blur-lg rounded-xl transition-opacity sm:opacity-0 hover:opacity-100 flex flex-col items-center justify-center p-4">
+                 class="absolute top-0 right-0 left-0 bottom-0 backdrop-blur-lg rounded-b-xl transition-opacity sm:opacity-0 hover:opacity-100 flex flex-col items-center justify-center p-4">
                 <Text type="headline3" class="text-center mb-8">Antes de começar, como gostaria de ser chamado?</Text>
                 
                 <form  @submit.prevent="setUserName" class="p-4 w-full">

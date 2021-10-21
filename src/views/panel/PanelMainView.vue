@@ -2,7 +2,7 @@
     <div class="min-h-screen relative">
 
         <!-- Menu -->
-        <header class="flex items-center absolute right-5 top-5 sm:right-9 sm:top-6">
+        <header class="flex items-center absolute right-3 top-3 sm:right-9 sm:top-6">
             <!-- Moto noturno -->
             <DarkModeToogle icon="moon" size="3rem" iconSize="1.5rem"/>
 

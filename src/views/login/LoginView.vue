@@ -16,6 +16,7 @@
             <Input v-model="state.password" name="senha" 
                    type="password"
                    placeholder="Senha" class="mb-4"
+                   autocomplete="senha"
                    :rules="[required]"/>
             <Button>
                 <transition name="fade" mode="out-in">

@@ -1,19 +1,22 @@
 <template>
     <div class="w-full pt-5 sm:pt-10 pb-12">
         
-        <div class="px-8 pb-8">
-            <Text type="headline1" class="mb-1 w-52 sm:w-auto">Bem-vindo {{ userName }}!</Text>
+        <div class="px-5 sm:px-8 pb-8">
+            <div class="flex flex-col sm:flex-row mb-1 w-52 sm:w-auto">
+                <Text type="headline1">Bem-vindo&nbsp;</Text>
+                <Text type="headline1"> {{ userName }}!</Text>
+            </div>
             <Text type="headline4">{{ subtitle }}</Text>
         </div>
 
         <!-- Cards -->
         <transition name="fade" mode="out-in">
-            <div class="sm:flex flex-wrap px-6" v-if="state.loading">
+            <div class="sm:flex flex-wrap px-5 sm:px-6" v-if="state.loading">
                 <SurveyCardSkeleton v-for="n in 10" :key="n" :style="{width: `${200 + 20 * randomInt(1, 5)}px`}"/>
                 <NewSurveyCard @click="$router.push({ name: 'newSurvey'})"/>
             </div>
 
-            <div class="sm:flex flex-wrap px-6" v-else>
+            <div class="sm:flex flex-wrap px-5 sm:px-6" v-else>
                 <SurveyCard v-for="survey in state.surveys"
                             :key="survey.token" 
                             :survey="survey"
@@ -25,7 +28,7 @@
 
         <!-- Detalhe -->
         <transition name="fade">
-            <div class="fixed flex flex-col items-center justify-center top-0 left-0 w-full h-screen bg-black/60" @click.self="state.detailOpened = false" v-show="state.detailOpened">
+            <div class="fixed flex flex-col items-center justify-center top-0 left-0 w-full h-screen bg-black/70" @click.self="state.detailOpened = false" v-show="state.detailOpened">
 
                 <!-- QR Code -->
                 <div id="qrCode" class="rounded-xl overflow-hidden mb-6"></div>

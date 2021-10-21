@@ -1,73 +1,81 @@
 <template>
-    <transition name="fade" mode="out-in">
-        <!-- Loading -->
-        <div class="h-screen flex items-center justify-center" v-if="state.loading" key="1">
-            <Loading />
-        </div>
+    <div class="min-h-screen relative">
 
-        <div class="min-h-screen flex flex-col py-4 items-center justify-center" key="2" v-else>
-
-            <transition name="drill" mode="out-in">
-
-
-                <!-- Votação conluída -->
-                <div v-if="!state.survey?.active" class="container">
-                    <!-- Titulo da questão -->
-                    <Lottie animation="trophy" size="400px" class="-mb-20"/>
-                    <Text type="headline2" class="mb-8 text-center relative z-10 w-full">{{ state.survey?.title }}</Text>
-                    <Text type="headline1" class="text-center relative z-10">{{ mostVoted?.title }}</Text>
-                    <Text type="headline4">Venceu com {{ mostVoted?.votes.length }} votos!</Text>
-                
-                    <Alternative v-for="(question, index) in ordenedVotes"
-                                 :key="index"
-                                 :votes="question.votes.length" 
-                                 :percentage="(question.votes.length / totalVotes) * 100"
-                                 :title="question.title"/>
-                </div>
-
-                <!-- Votação -->
-                <div class="container" v-else-if="!hasVoted">
-
-                    <!-- Titulo da questão -->
-                    <Lottie animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
-                    <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
-            
-                    <div class="flex items-center py-4 border-b border-white w-full" v-for="(question, index) in state.survey.questions" :key="index">
-                        <Radio name="survey" :radioValue="index" v-model="state.selectedAlternative"/>
-                        <Text class="px-4">{{ question.title }}</Text>
-                    </div>
-                    <Button class="mt-8" @click="vote()">
-                        <Loading v-if="state.voting"/>
-                        <div v-else>Votar</div>
-                    </Button>
-                </div>
-
-                <!-- Votação em andamento -->
-                <div class="container" v-else>
-                    <!-- Titulo da questão -->
-                    <Lottie animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
-                    <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
-                    <Alternative v-for="(question, index) in state.survey.questions"
-                                 :key="index"
-                                 :votes="question.votes.length" 
-                                 :percentage="(question.votes.length / totalVotes) * 100"
-                                 :title="question.title"/>
-                </div>
-            </transition>
-
-
-            <Chat/>
-        
-            <!-- Balão de novo voto -->
-            <NewVote ref="newVoteRef"/>
-
+        <header class="flex items-center absolute top-4 px-4 w-full">
             <!-- Voltar -->
-            <IconButton class="absolute top-4 left-4" icon="times" iconSize="1.5rem" size="3rem" @click="$router.replace({ name: 'pin' })"/>
+            <IconButton icon="times" iconSize="1.5rem" size="3rem" @click="$router.replace({ name: 'pin' })"/>
+            <div class="flex-1"></div>
+            <TextButton @click="$router.push({ name: 'login' })">Criar minha enquete</TextButton>
+
+            <Divider :vertical="true" class="ml-5 mr-2"/>
 
             <!-- Dark Mode -->
-            <DarkModeToogle class="absolute top-4 right-4"/>
-        </div>
-    </transition>
+            <DarkModeToogle/>
+        </header>
+        <transition name="fade" mode="out-in">
+            <!-- Loading -->
+            <div class="h-screen flex items-center justify-center" v-if="state.loading" key="1">
+                <Loading />
+            </div>
+
+            <div class="min-h-screen flex flex-col py-8 items-center justify-center" key="2" v-else>
+
+                <transition name="drill" mode="out-in">
+
+
+                    <!-- Votação conluída -->
+                    <div v-if="!state.survey?.active" class="container">
+                        <!-- Titulo da questão -->
+                        <Lottie animation="trophy" size="400px" class="-mb-20"/>
+                        <Text type="headline2" class="mb-8 text-center relative z-10 w-full">{{ state.survey?.title }}</Text>
+                        <Text type="headline1" class="text-center relative z-10">{{ mostVoted?.title }}</Text>
+                        <Text type="headline4">Venceu com {{ mostVoted?.votes.length }} votos!</Text>
+                    
+                        <Alternative v-for="(question, index) in ordenedVotes"
+                                     :key="index"
+                                     :votes="question.votes.length" 
+                                     :percentage="(question.votes.length / totalVotes) * 100"
+                                     :title="question.title"/>
+                    </div>
+
+                    <!-- Votação -->
+                    <div class="container" v-else-if="!hasVoted">
+
+                        <!-- Titulo da questão -->
+                        <Lottie animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
+                        <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
+                
+                        <div class="flex items-center py-4 border-b border-white w-full" v-for="(question, index) in state.survey.questions" :key="index">
+                            <Radio name="survey" :radioValue="index" v-model="state.selectedAlternative"/>
+                            <Text class="px-4">{{ question.title }}</Text>
+                        </div>
+                        <Button class="mt-8" @click="vote()">
+                            <Loading v-if="state.voting"/>
+                            <div v-else>Votar</div>
+                        </Button>
+                    </div>
+
+                    <!-- Votação em andamento -->
+                    <div class="container" v-else>
+                        <!-- Titulo da questão -->
+                        <Lottie animation="music" size="200px" class="-mb-8 2xl:-mb-0"/>
+                        <Text type="headline1" class="mb-8 text-center w-full break-words">{{ state.survey.title }}</Text>
+                        <Alternative v-for="(question, index) in state.survey.questions"
+                                     :key="index"
+                                     :votes="question.votes.length" 
+                                     :percentage="(question.votes.length / totalVotes) * 100"
+                                     :title="question.title"/>
+                    </div>
+                </transition>
+
+                <Chat/>
+            
+                <!-- Balão de novo voto -->
+                <NewVote ref="newVoteRef"/>
+
+            </div>
+        </transition>
+    </div>
 </template>
 
 <script lang='ts'>
@@ -79,7 +87,7 @@ import { useAlert } from '../../hooks/alert';
 import { useRoute, useRouter } from 'vue-router';
 
 // Componentes
-import { Lottie, Text, Radio, Button, Loading, IconButton, DarkModeToogle } from '../../components';
+import { Lottie, Text, Radio, Button, Loading, IconButton, DarkModeToogle, Divider, TextButton } from '../../components';
 import Chat from './chat/Chat.vue';
 import NewVote from './NewVote.vue';
 import Alternative from './Alternative.vue';
@@ -94,7 +102,7 @@ interface SurveyViewState {
 }
 
 const SurveyView = defineComponent({
-    components: { Lottie, Text, Alternative, Radio, Button, Loading, NewVote, IconButton, DarkModeToogle, Chat },
+    components: { Lottie, Text, Alternative, Radio, Button, Loading, NewVote, IconButton, DarkModeToogle, Chat, Divider, TextButton },
     setup() {
         const { anonymouslyLogin, getUser } = useAuth();
 

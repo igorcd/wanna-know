@@ -35,16 +35,16 @@
 @layer components {
     /* Textos */
     .headline1 {
-        @apply font-bold text-white text-4xl dark:text-gray-300;
+        @apply font-bold text-white text-3xl sm:text-4xl dark:text-gray-300;
     }
     .headline2 {
-        @apply font-medium text-white text-3xl;
+        @apply font-medium text-white text-2xl sm:text-3xl;
     }
     .headline3 {
-        @apply font-bold text-gray-700 text-2xl dark:text-gray-100;
+        @apply font-bold text-gray-700 text-xl sm:text-2xl dark:text-gray-100;
     }
     .headline4 {
-        @apply text-white text-xl;
+        @apply text-white text-lg sm:text-xl;
     }
     .subheader {
         @apply text-white  opacity-75;

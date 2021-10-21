@@ -195,15 +195,17 @@ export const initialized = () => getApps().length > 0;
 const initialize = (): Promise<void> => {
     return new Promise((resolve) => {
         const firebaseConfig = {
-            apiKey: "AIzaSyAn_tUn9oZNyxnFLYShWBEZQ-XrlrhOqmI",
-            authDomain: "wanna-know-f25bf.firebaseapp.com",
-            databaseURL: "https://wanna-know-f25bf-default-rtdb.firebaseio.com",
-            projectId: "wanna-know-f25bf",
-            storageBucket: "wanna-know-f25bf.appspot.com",
-            messagingSenderId: "868546342471",
-            appId: "1:868546342471:web:4b36f1144e3c8588ca4b62",
-            measurementId: "G-K46V0KEMQ8"
+            apiKey: process.env.VUE_APP_apiKey,
+            authDomain: process.env.VUE_APP_authDomain,
+            databaseURL: process.env.VUE_APP_databaseURL,
+            projectId: process.env.VUE_APP_projectId,
+            storageBucket: process.env.VUE_APP_storageBucket,
+            messagingSenderId: process.env.VUE_APP_messagingSenderId,
+            appId: process.env.VUE_APP_appId,
+            measurementId: process.env.VUE_APP_measurementId
         };
+
+        console.log(firebaseConfig);
             
         // Initialize Firebase
         if(getApps().length > 0) {

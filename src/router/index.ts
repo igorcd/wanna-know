@@ -1,20 +1,23 @@
 import { createRouter, createWebHistory, NavigationGuard } from "vue-router";
 import initialize, { initialized, useAuth } from "../hooks/firebase";
 
-import LoginMainView from '../views/login/LoginMainView.vue';
-import LoginView from '../views/login/LoginView.vue';
-import PinView from '../views/login/PinView.vue';
-import RegisterView from '../views/register/RegisterView.vue';
-import RegisterFinishView from '../views/register/RegisterFinishView.vue';
-import RegisterName from '../views/register/RegisterName.vue';
+// Login
+const LoginMainView = () => import(/* webpackChunkName: "login" */'../views/login/LoginMainView.vue');
+const PinView = () => import(/* webpackChunkName: "login" */'../views/login/PinView.vue');
+const LoginView = () => import(/* webpackChunkName: "login" */'../views/login/LoginView.vue');
+
+// Register
+const RegisterView = () => import(/* webpackChunkName: "register" */'../views/register/RegisterView.vue');
+const RegisterFinishView = () => import(/* webpackChunkName: "register" */'../views/register/RegisterFinishView.vue');
+const RegisterName = () => import(/* webpackChunkName: "register" */'../views/register/RegisterName.vue');
 
 // Panel
-import PanelMainView from '../views/panel/PanelMainView.vue';
-import DashboardView from '../views/panel/dashboard/DashboardView.vue';
-import NewSurveyView from '../views/panel/newSurvey/NewSurveyView.vue';
+const PanelMainView = () => import(/* webpackChunkName: "panel" */'../views/panel/PanelMainView.vue');
+const DashboardView = () => import(/* webpackChunkName: "panel" */'../views/panel/dashboard/DashboardView.vue');
+const NewSurveyView = () => import(/* webpackChunkName: "panel" */'../views/panel/newSurvey/NewSurveyView.vue');
 
 // Voto
-import SurveyMainView from '../views/survey/SurveyMainView.vue';
+const SurveyMainView = () => import(/* webpackChunkName: "survey" */'../views/survey/SurveyMainView.vue');
 
 
 // NavigationGuards

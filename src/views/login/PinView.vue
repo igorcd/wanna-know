@@ -34,14 +34,13 @@ import { useRouter } from 'vue-router';
 
 import { Input, Button, Form, Text, TextButton, Loading } from '../../components';
 import { useAlert } from '../../hooks/alert';
-import { useAuth, useFirestore } from '../../hooks/firebase';
+import { useAuth } from '../../hooks/firebase';
 import Survey from '../../interfaces/Survey';
 import { required } from '../../utils/validators';
 
 const PinView = defineComponent({
     components: { Input, Button, Form, Text, TextButton, Loading },
     setup() {
-        const { getCollection } = useFirestore();
         const { replace } = useRouter();
         const { getUser, anonymouslyLogin } = useAuth();
         const alert = useAlert();
@@ -70,17 +69,7 @@ const PinView = defineComponent({
                         await anonymouslyLogin();
                     }
 
-                    const resp = await getCollection<Survey>("surveys", [
-                        ["token", "==", state.pin]
-                    ]);
-
-                    const survey = resp[0];
-
-                    if(!survey) {
-                        throw "Este pin é inválido";
-                    }
-
-                    replace({ name: 'survey', params: { id: survey.id } });
+                    // TODO - CRIAR O GET COLLECTION
                     
                 } catch (err) {
                     const error = err as string;

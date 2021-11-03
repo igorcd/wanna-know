@@ -46,7 +46,6 @@ import { defineComponent, nextTick, onBeforeUnmount, onMounted, reactive } from 
 import { ResizeObserver } from 'resize-observer';
 import { useRoute } from 'vue-router';
 import { useAlert } from '../../../hooks/alert';
-import { useFirestore } from '../../../hooks/firebase';
 import { Message } from '../../../interfaces/Conversation';
 import ChatAdminMessage from './ChatAdminMessage.vue';
 import ChatMessage from './ChatMessage.vue';
@@ -62,7 +61,6 @@ interface ChatState {
 const Chat = defineComponent({
     components: { ChatAdminMessage, ChatMessage, Card, Text, Icon },
     setup() {
-        const { watchCollection, insert } = useFirestore();
         const alert = useAlert();
         const { params } = useRoute();
 
@@ -75,15 +73,7 @@ const Chat = defineComponent({
         
         let unwatch: () => void;
         const loadChat = async() => {
-            unwatch = await watchCollection<Message>({
-                path: `chats/${params.id}/messages`,
-                orderBy: [{ field: 'timeStamp' }],
-                listeners: {
-                    onAdd: (m) => {
-                        state.messages.push(m);
-                    }
-                }
-            });
+            // TODO - IMPLEMENTAR WATCH DO CHAT
         };
 
         const setUserName = async() => {
@@ -95,11 +85,7 @@ const Chat = defineComponent({
             else if(state.userName.length && state.userName != 'admin') {
                 state.userNameSetted = true;
                 
-                insert<Message>(`chats/${params.id}/messages`, {
-                    author: 'admin',
-                    content: `${state.userName} entrou`,
-                    timeStamp: Date.now()
-                });
+                // TODO - INSERIR MENSAGEM DE QUE O USUÁRIO ENTROU
                 nextTick(() => {
                     (document.querySelector("#messageInput") as HTMLInputElement).focus();
                 });
@@ -111,11 +97,7 @@ const Chat = defineComponent({
                 const message = state.message;
                 state.message = "";
                 (document.querySelector("#messageInput") as HTMLInputElement).focus();
-                await insert<Message>(`chats/${params.id}/messages`, {
-                    author: state.userName,
-                    content: message,
-                    timeStamp: Date.now()
-                });
+                // TODO - IMPLEMENTAR O ENVIO DE MENSAGENS
             }
         };
 

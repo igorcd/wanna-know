@@ -82,7 +82,6 @@
 import { computed, defineComponent, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 
 // Hooks
-import { useFirestore } from '../../hooks/firebase';
 import { useAlert } from '../../hooks/alert';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -106,7 +105,6 @@ const SurveyView = defineComponent({
     setup() {
         const { anonymouslyLogin, getUser } = useAuth();
 
-        const { watchRef, update } = useFirestore();
         const alert = useAlert();
         const { params } = useRoute();
         const { replace } = useRouter();
@@ -139,15 +137,20 @@ const SurveyView = defineComponent({
                 const json: { ip: string } = await resp.json();
                 state.ip = json.ip;
 
-                unwatch = await watchRef<Survey>(`surveys/${params.id}`, (s) => {
-                    if(state.survey != null) {
-                        const field = s.questions.find((el, index) => state.survey?.questions[index].votes.length != el.votes.length);
-                        if(field) {
-                            newVoteRef.value.addInQueue(field.title);
+                // TODO - IMPLEMENTAR O WATCH DA SURVEY
+                state.survey = {
+                    title: "Mock",
+                    questions: [
+                        {
+                            title: "Questão 1",
+                            votes: ['1.1.1.1', '1.1.1.2']
                         }
-                    }
-                    state.survey = { ...s };
-                });
+                    ],
+                    token: "000000",
+                    active: true,
+                    userEmail: "igor.dantas64@gmail.com",
+                    id: '123123'
+                };
 
                 state.loading = false;
                 
@@ -176,7 +179,8 @@ const SurveyView = defineComponent({
                 state.voting = true;
                 state.survey!.questions[state.selectedAlternative].votes.push(state.ip);
                 newVoteRef.value.addInQueue(state.survey!.questions[state.selectedAlternative].title);
-                await update(`surveys/${params.id}`, { questions: [...state.survey!.questions] });
+
+                // TODO - IMPLEMENTAR O UPDATE
             }
         };
 

@@ -67,7 +67,7 @@ import NewSurveyCard from './NewSurveyCard.vue';
 import SurveyCardSkeleton from './SurveyCardSkeleton.vue';
 
 import { randomInt } from '../../../utils/helperFunctions';
-import { useAuth, useFirestore } from '../../../hooks/firebase';
+import { useAuth } from '../../../hooks/firebase';
 import Survey from '../../../interfaces/Survey';
 import { useAlert } from '../../../hooks/alert';
 
@@ -82,7 +82,6 @@ const DashboardView = defineComponent({
     components: { Text, SurveyCard, NewSurveyCard, SurveyCardSkeleton, Icon },
     setup() {
 
-        const { watchCollection, update } = useFirestore();
         const { getUser } = useAuth();
         
         const userName = computed(() => {
@@ -146,29 +145,10 @@ const DashboardView = defineComponent({
             state.detailOpened = true;
         };
 
-        let unWatch: () => void;
         const loadSurveys = async () => {
             try {
                 state.surveys = [];
-
-                const email = getUser()?.email;
-
-                unWatch = await watchCollection<Survey>({
-                    path:'surveys',
-                    filters: [
-                        ['userEmail', '==', email]
-                    ],
-                    listeners: {
-                        onAdd: (survey) => state.surveys.push(survey),
-                        onChange: (survey) => {
-                            const surveyRef = state.surveys.find(el => el.token == survey.token)!;
-                            surveyRef.questions.forEach((q, index) => { q.votes = survey.questions[index].votes;});
-                            surveyRef.active = survey.active;
-                            surveyRef.title = survey.title;
-                        }
-                    } 
-                });
-
+                // TODO - Criar método de Watch
                 state.loading = false;
             } catch (error) {
                 alert({
@@ -185,7 +165,7 @@ const DashboardView = defineComponent({
 
         /** Finalizar enquete */
         const closeModal = async (id: string) => {
-            await update(`surveys/${id}`, { active: false });
+            // TODO - IMPLEMENTAR FINALIZAÇÃO DA ENQUETE
         };
 
         /** Abrir modal de finalização da enquete */
@@ -208,7 +188,7 @@ const DashboardView = defineComponent({
 
         onMounted(() => loadSurveys());
 
-        onBeforeUnmount(() => unWatch && unWatch());
+        // TODO - CHAMAR O UNWATCH NO BEFORE LEAVE
 
         return { state, randomInt, subtitle, userName, openCloseSurveyModal, showDetailModal, downloadQrCode };
     }

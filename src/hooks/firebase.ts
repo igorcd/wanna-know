@@ -1,8 +1,39 @@
 import { initializeApp, getApps } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, addDoc, collection, query, onSnapshot } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, AuthError, updateProfile, signInWithEmailAndPassword, signOut, signInAnonymously } from 'firebase/auth';
 import { default_response } from "../utils/constants";
 import firebaseErrors from "../utils/firebaseErrors";
+
+/** Verificar se o firebase está inicializado */
+export const initialized = () => getApps().length > 0;
+
+/** Inicializar o firebase */
+const initialize = (): Promise<void> => {
+    return new Promise((resolve) => {
+        const firebaseConfig = {
+            apiKey: process.env.VUE_APP_apiKey,
+            authDomain: process.env.VUE_APP_authDomain,
+            databaseURL: process.env.VUE_APP_databaseURL,
+            projectId: process.env.VUE_APP_projectId,
+            storageBucket: process.env.VUE_APP_storageBucket,
+            messagingSenderId: process.env.VUE_APP_messagingSenderId,
+            appId: process.env.VUE_APP_appId,
+            measurementId: process.env.VUE_APP_measurementId
+        };
+
+        console.log(firebaseConfig);
+            
+        // Initialize Firebase
+        if(getApps().length > 0) {
+            throw "O Firebase ja foi inicializado";
+        }
+        
+        initializeApp(firebaseConfig);
+
+        const auth = getAuth();
+        auth.onAuthStateChanged(() => resolve());
+    });
+};
 
 /** Utilizar a autenticação do firebase */
 export function useAuth() {
@@ -67,35 +98,63 @@ export function useAuth() {
     };
 }
 
-/** Verificar se o firebase está inicializado */
-export const initialized = () => getApps().length > 0;
+type CollectionListener<T> = (el: T) => void;
 
-/** Inicializar o firebase */
-const initialize = (): Promise<void> => {
-    return new Promise((resolve) => {
-        const firebaseConfig = {
-            apiKey: process.env.VUE_APP_apiKey,
-            authDomain: process.env.VUE_APP_authDomain,
-            databaseURL: process.env.VUE_APP_databaseURL,
-            projectId: process.env.VUE_APP_projectId,
-            storageBucket: process.env.VUE_APP_storageBucket,
-            messagingSenderId: process.env.VUE_APP_messagingSenderId,
-            appId: process.env.VUE_APP_appId,
-            measurementId: process.env.VUE_APP_measurementId
-        };
+interface Listeners<T> {
+    onAdd: CollectionListener<T>,
+    onChange?: CollectionListener<T>,
+    onRemove?: CollectionListener<T>,
+}
 
-        console.log(firebaseConfig);
-            
-        // Initialize Firebase
-        if(getApps().length > 0) {
-            throw "O Firebase ja foi inicializado";
-        }
+interface BaseRef {
+    id?: string;
+}
+
+export function useFirestore() {
+    const db = getFirestore();
+    
+    const insert = async <T>(path: string, data: T) => {
+        const segments = path.split('/');
+        const basePath =  segments[0];
+        const docRef = await addDoc(collection(db, basePath, ...segments.slice(1)), data);
+        return docRef;
+    };
+
+    const watchCollection = <T extends BaseRef>(data: { path: string, listeners: Listeners<T>, filters?: any, orderBy?: any}) => {
+        const { path, listeners, filters } = data;
         
-        initializeApp(firebaseConfig);
+        const segments = path.split('/');
+        const basePath = segments[0];
 
-        const auth = getAuth();
-        auth.onAuthStateChanged(() => resolve());
-    });
-};
+        const q = query(collection(db, basePath, ...segments.slice(1)));
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+
+            snapshot.docChanges().forEach(change => {
+                const data = {
+                    id: change.doc.id,
+                    ...change.doc.data()
+                } as T;
+
+                if(change.type == 'added') {
+                    listeners.onAdd(data);
+                }
+
+                if(change.type == 'modified' && listeners.onChange) {
+                    listeners.onChange(data);
+                }
+
+                if (change.type == 'removed' && listeners.onRemove) {
+                    listeners.onRemove(data);
+                }
+            });
+        });
+
+        return unsubscribe;
+    };
+
+    return { insert, watchCollection };
+}
+
 
 export default initialize;

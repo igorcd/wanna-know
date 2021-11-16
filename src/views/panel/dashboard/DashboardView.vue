@@ -67,7 +67,7 @@ import NewSurveyCard from './NewSurveyCard.vue';
 import SurveyCardSkeleton from './SurveyCardSkeleton.vue';
 
 import { randomInt } from '../../../utils/helperFunctions';
-import { useAuth } from '../../../hooks/firebase';
+import { useAuth, useFirestore } from '../../../hooks/firebase';
 import Survey from '../../../interfaces/Survey';
 import { useAlert } from '../../../hooks/alert';
 
@@ -90,6 +90,7 @@ const DashboardView = defineComponent({
         });
         
         const alert = useAlert();
+        const { watchCollection } = useFirestore();
 
         const state = reactive<DashboardViewState>({
             loading: true,
@@ -144,11 +145,26 @@ const DashboardView = defineComponent({
             qrCode.update({ data:url });
             state.detailOpened = true;
         };
-
+        let unWatch:() => void;
         const loadSurveys = async () => {
             try {
                 state.surveys = [];
-                // TODO - Criar método de Watch
+                unWatch = watchCollection<Survey>({
+                    path: 'surveys',
+                    listeners: {
+                        onAdd: (survey) => state.surveys.push(survey),
+                        onChange: (survey) => {
+                            const surveyRef = state.surveys.find(el => el.token == survey.token);
+                            if(surveyRef) {
+                                surveyRef.questions.forEach((q, index) => { q.votes = survey.questions[index].votes;});
+                                surveyRef.active = survey.active;
+                                surveyRef.title = survey.title;
+                            }
+                        }
+                    }
+                });
+
+
                 state.loading = false;
             } catch (error) {
                 alert({
@@ -189,7 +205,7 @@ const DashboardView = defineComponent({
         onMounted(() => loadSurveys());
 
         // TODO - CHAMAR O UNWATCH NO BEFORE LEAVE
-
+        onBeforeUnmount(() => unWatch());
         return { state, randomInt, subtitle, userName, openCloseSurveyModal, showDetailModal, downloadQrCode };
     }
 });

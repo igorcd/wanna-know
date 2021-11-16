@@ -60,7 +60,7 @@ import { defineComponent, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { customAlphabet } from 'nanoid';
 import { useAlert } from '../../../hooks/alert';
-import { useAuth } from '../../../hooks/firebase';
+import { useAuth, useFirestore } from '../../../hooks/firebase';
 import { default_response } from '../../../utils/constants';
 
 import { IconButton, AutoResizeTextArea, TextButton, Loading, Card } from '../../../components';
@@ -82,6 +82,7 @@ const CreateSurveyView = defineComponent({
         const alert = useAlert();
         const router = useRouter();
         const { getUser } = useAuth();
+        const { insert } = useFirestore();
 
         const state = reactive<CreateSurveyState>({
             loading: false,
@@ -130,6 +131,7 @@ const CreateSurveyView = defineComponent({
                         token,
                         userEmail: email
                     };
+                    await insert('surveys', survey);
 
                     // TODO - INSERIR A ENQUETE NA TABELA DE FIREBASE
 
